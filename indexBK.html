@@ -462,7 +462,17 @@
     const esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
     
     function loadJson(key,fallback){try{return Object.assign({},fallback,JSON.parse(localStorage.getItem(key)||'null')||{});}catch{return structuredClone(fallback)}}
-    function saveAll(){localStorage.setItem(STORAGE_KEYS.questions,JSON.stringify(state.questions));localStorage.setItem(STORAGE_KEYS.results,JSON.stringify(state.results));localStorage.setItem(STORAGE_KEYS.settings,JSON.stringify(state.config));if(state.admin)localStorage.setItem(STORAGE_KEYS.adminSession,JSON.stringify(state.admin));}
+    function saveAll(){
+    try {
+        localStorage.setItem(STORAGE_KEYS.questions,JSON.stringify(state.questions));
+        localStorage.setItem(STORAGE_KEYS.results,JSON.stringify(state.results));
+        localStorage.setItem(STORAGE_KEYS.settings,JSON.stringify(state.config));
+        if(state.admin)localStorage.setItem(STORAGE_KEYS.adminSession,JSON.stringify(state.admin));
+    } catch (e) {
+        toast('Gagal menyimpan! Ukuran gambar terlalu besar.');
+        console.error('Storage quota exceeded', e);
+    }
+}
     function uid(){return 'q_'+Math.random().toString(36).slice(2,9)+Date.now().toString(36)}
     function nowText(){return new Date().toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'})}
     function safeParse(v,f){try{return v?JSON.parse(v):f}catch{return f}}
@@ -651,8 +661,31 @@
     function renderOptionEditor(options){const host=el('optionEditor');host.innerHTML=(options&&options.length?options:[{text:'',score:0,image:''}]).map((opt,idx)=>`<div class="choice-row"><div class="field" style="margin:0"><label>Teks opsi ${idx+1}</label><input class="input opt-text" value="${esc(opt.text||'')}" placeholder="Teks opsi ${idx+1}"></div><div class="field" style="margin:0"><label>Skor</label><input class="input opt-score" type="number" min="0" step="1" value="${Number(opt.score||0)}"></div><div class="field" style="margin:0"><label>Gambar jawaban</label><input class="input opt-image-url" type="url" placeholder="URL" value="${esc(opt.image&&opt.image.startsWith('http')?opt.image:'')}"><input class="input opt-image-file" type="file" accept="image/*" onchange="handleOptionImageFile(this)"><input type="hidden" class="opt-image-data" value="${esc(opt.image&&opt.image.startsWith('data:')?opt.image:'')}">${opt.image?`<img class="answer-thumb answer-thumb-inline" src="${opt.image}">`:''}</div><div class="field" style="margin:0"><label>Aksi</label><button class="btn danger small" type="button" onclick="removeOptionRow(this)">Hapus</button></div></div>`).join('')}
     function gatherOptions(){return[...document.querySelectorAll('#optionEditor .choice-row')].map(row=>({text:row.querySelector('.opt-text').value.trim(),score:Number(row.querySelector('.opt-score').value||0),image:row.querySelector('.opt-image-data').value.trim()||row.querySelector('.opt-image-url').value.trim()})).filter(x=>x.text||x.image)}
     async function saveQuestion(){if(!requireSuper())return;const prompt=el('qPrompt').value.trim();const type=el('qType').value;if(!prompt){toast('Teks soal belum diisi.');return}let image=state.pendingImageData||el('qImageUrl').value.trim();if(el('qImageFile').files&&el('qImageFile').files[0])image=await fileToDataUrl(el('qImageFile').files[0]);const question={id:state.editingQuestionId||uid(),type,prompt,image,options:type==='mcq'?gatherOptions():[]};if(type==='mcq'&&question.options.length<2){toast('Pilihan ganda minimal 2 opsi.');return}if(state.editingQuestionId)state.questions=state.questions.map(q=>q.id===state.editingQuestionId?question:q);else state.questions.push(question);saveAll();renderQuestions();renderHome();closeQuestionModal();toast('Soal berhasil disimpan.')}
-    function fileToDataUrl(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result));r.onerror=reject;r.readAsDataURL(file)})}
-    
+    function fileToDataUrl(file) {
+    return new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let w = img.width, h = img.height;
+                const maxSize = 600; // Auto-resize maksimal 600px agar aman di penyimpanan
+                if (w > maxSize || h > maxSize) {
+                    if (w > h) { h = Math.round((maxSize / w) * h); w = maxSize; } 
+                    else { w = Math.round((maxSize / h) * w); h = maxSize; }
+                }
+                canvas.width = w; canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, w, h);
+                resolve(canvas.toDataURL('image/webp', 0.8)); // Kompres menjadi WEBP kualitas 80%
+            };
+            img.onerror = reject;
+            img.src = e.target.result;
+        };
+        r.onerror = reject;
+        r.readAsDataURL(file);
+    });
+}
     /* UTILS & EXPORT */
     function exportCSV(){
         if(!state.results.length){toast('Belum ada data untuk diekspor.');return}
