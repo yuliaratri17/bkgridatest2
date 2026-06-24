@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#0f172a" />
+  <title id="siteTitleTag">Alat Tes Psikologi Internal - SMK PGRI 2 Kediri</title>
+  <style>
+    :root {
+      --bg: #f4f7fb; --surface: #fff; --surface-2: #f8fafc; --text: #0f172a; --muted: #64748b;
+      --primary: #0f3a66; --primary-2: #1d4ed8; --accent: #0ea5e9; --danger: #dc2626; --success: #16a34a;
+      --border: #dbe3ee; --shadow: 0 10px 30px rgba(15,23,42,.08); --radius: 20px;
+    }
+    * { box-sizing: border-box; } html, body { height: 100%; }
+    body { margin: 0; font-family: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; background: var(--bg); color: var(--text); transition: background 0.3s; }
+    button, input, textarea, select { font: inherit; } a { color: var(--primary-2); text-decoration: none; }
+    .bg-layer { position: fixed; inset: 0; z-index: -2; background: linear-gradient(180deg,#eef4ff 0%,#f7fafc 40%,#f4f7fb 100%); pointer-events: none; }
+    .app { min-height: 100%; display: flex; flex-direction: column; }
+    .topbar { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(12px); background: rgba(255,255,255,.85); border-bottom: 1px solid var(--border); }
+    .topbar-inner { max-width: 1200px; margin: 0 auto; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .logo { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; background: linear-gradient(135deg,var(--primary),#2563eb); color: #fff; box-shadow: var(--shadow); font-weight: 800; overflow: hidden; flex: 0 0 auto; }
+    .logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .brand h1 { margin: 0; font-size: clamp(16px, 2vw, 22px); line-height: 1.2; }
+    .brand p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+    .pill-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .pill { border: 1px solid var(--border); background: #fff; color: var(--text); border-radius: 999px; padding: 9px 14px; box-shadow: 0 4px 12px rgba(15,23,42,.04); cursor: pointer; transition: .15s ease; }
+    .pill:hover { transform: translateY(-1px); } .pill.primary { background: var(--primary); color: #fff; border-color: transparent; } .pill.ghost { background: transparent; border-color: transparent; }
+    .container { width: min(1200px,100%); margin: 0 auto; padding: 18px 16px 28px; flex: 1; }
+    .card { background: var(--surface); border: 1px solid rgba(219,227,238,.95); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom: 20px; }
+    .grid { display: grid; gap: 16px; } .cols-2 { grid-template-columns: repeat(2,minmax(0,1fr)); } .cols-3 { grid-template-columns: repeat(3,minmax(0,1fr)); }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .form-subgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width:900px) { .cols-2, .cols-3 { grid-template-columns: 1fr; } }
+    .hidden { display: none !important; }
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; } .field label { font-size: 13px; color: #334155; font-weight: 700; }
+    .input, textarea, select { width: 100%; border: 1px solid var(--border); border-radius: 12px; background: #fff; padding: 11px 14px; color: var(--text); outline: none; transition: .15s ease; }
+    textarea { min-height: 80px; resize: vertical; } .input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(14,165,233,.15); }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; } .row>* { flex: 1 1 180px; }
+    .btn { border: none; border-radius: 12px; padding: 12px 16px; cursor: pointer; transition: .15s ease; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn:hover { transform: translateY(-1px); filter: brightness(1.05); } .btn.primary { background: var(--primary); color: #fff; } .btn.blue { background: var(--primary-2); color: #fff; }
+    .btn.gray { background: #e2e8f0; color: #0f172a; } .btn.success { background: var(--success); color: #fff; } .btn.danger { background: var(--danger); color: #fff; }
+    .btn.outline { background: #fff; border: 1px solid var(--border); color: #0f172a; } .btn.small { padding: 8px 12px; border-radius: 10px; font-size: 13px; }
+    .section-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 16px; } .section-title h3 { margin: 0; font-size: 20px; }
+    .form-section-header { font-size: 15px; font-weight: 800; color: var(--primary); border-left: 4px solid var(--accent); padding-left: 10px; margin: 24px 0 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .radio-group-box { display: flex; flex-direction: column; gap: 8px; background: var(--surface-2); padding: 12px; border-radius: 12px; border: 1px solid var(--border); }
+    .radio-inline-label { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500 !important; color: var(--text); cursor: pointer; }
+    .radio-inline-label input[type="radio"] { transform: scale(1.1); margin: 0; cursor: pointer; }
+    .badge { display: inline-flex; align-items: center; gap: 8px; background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; padding: 6px 12px; border-radius: 999px; font-size: 13px; }
+    
+    .hero-banner { background: linear-gradient(135deg, #0f3a66, #1d4ed8, #0ea5e9); color: #fff; border-radius: 24px; padding: 40px 24px; text-align: center; margin-bottom: 20px; box-shadow: var(--shadow); }
+    .hero-banner h2 { font-size: clamp(22px, 3.5vw, 36px); margin: 0 0 12px; line-height: 1.2; }
+    .hero-banner p { rgba(255,255,255,0.9); font-size: 15px; max-width: 750px; margin: 0 auto 20px; line-height: 1.6; }
+    
+    .radio-card { border: 1px solid var(--border); border-radius: 12px; padding: 14px; display: flex; gap: 12px; align-items: flex-start; cursor: pointer; transition: .15s ease; background: var(--surface-2); margin-bottom: 8px; }
+    .radio-card:hover { border-color: var(--accent); background: #eff6ff; }
+    .radio-card input { margin-top: 3px; }
+    
+    .progress-wrap { width: 100%; height: 10px; border-radius: 999px; background: #e2e8f0; overflow: hidden; margin: 12px 0; }
+    .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width 0.2s; }
+    
+    .table-wrap { overflow: auto; border: 1px solid var(--border); border-radius: 14px; background: #fff; }
+    table { border-collapse: collapse; width: 100%; min-width: 800px; } th, td { padding: 12px; border-bottom: 1px solid #eef2f7; text-align: left; }
+    th { background: #f8fafc; font-weight: 700; color: #334155; }
+    .toast { position: fixed; left: 50%; bottom: -60px; transform: translateX(-50%); background: #0f172a; color: #fff; padding: 12px 24px; border-radius: 999px; box-shadow: var(--shadow); z-index: 100; transition: bottom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-weight: 600; font-size: 14px; }
+    .toast.show { bottom: 24px; }
+    
+    .page { display: none; } .page.active { display: block; animation: slideUp 0.25s ease-out; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .admin-layout { display: grid; grid-template-columns: 240px 1fr; gap: 20px; }
+    .admin-sidebar { display: flex; flex-direction: column; gap: 6px; }
+    .admin-menu-btn { width: 100%; border: none; background: transparent; text-align: left; padding: 12px 16px; border-radius: 10px; cursor: pointer; font-weight: 600; color: var(--muted); transition: .15s; }
+    .admin-menu-btn:hover { background: #e2e8f0; color: var(--text); }
+    .admin-menu-btn.active { background: var(--primary); color: #fff; }
+    @media (max-width: 768px) { .admin-layout { grid-template-columns: 1fr; } }
+
+    .q-editor-card { border: 1px solid var(--border); border-radius: 14px; padding: 16px; background: var(--surface-2); margin-bottom: 16px; }
+    .opt-editor-row { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; background: #fff; padding: 8px; border-radius: 8px; border: 1px solid var(--border); }
+    .img-preview { max-height: 100px; max-width: 150px; object-fit: contain; border: 1px solid var(--border); border-radius: 8px; background: #fff; margin-top: 6px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="bg-layer"></div>
+  <div class="app">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <div class="logo" id="mainLogoBox">💻</div>
+          <div>
+            <h1 id="headerTitle">Alat Tes Psikologi Internal</h1>
+            <p id="headerSubtitle">SMK PGRI 2 Kediri · BK Cloud Management</p>
+          </div>
+        </div>
+        <div class="pill-row">
+          <button class="pill ghost" onclick="showPage('home')">Beranda</button>
+          <button class="pill ghost" onclick="openAdminPanel()">Panel Admin</button>
+          <button class="pill primary" onclick="showPage('identity')">Mulai Tes</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- BERANDA (HOME) -->
+      <section id="pageHome" class="page active">
+        <div class="hero-banner">
+          <h2 id="heroTitleView">Selamat Datang di Portal Tes Psikologi</h2>
+          <p id="heroTextView">Silakan isi kelengkapan portofolio biodata pribadi secara valid, kerjakan rangkaian instrumen tes gambar, dan hasil tes akan langsung terarsip ke sistem cloud sekolah secara otomatis.</p>
+          <button class="btn success" style="padding:14px 28px; border-radius:999px; font-size:16px;" onclick="showPage('identity')">Isi Biodata & Mulai Tes Baru</button>
+        </div>
+        <div class="grid cols-2">
+          <div class="card">
+            <h3 style="margin-top:0; color:var(--primary)">Petunjuk Pelaksanaan Tes</h3>
+            <p id="guideTextView" style="line-height:1.6; color:#334155;">1. Pastikan koneksi internet stabil selama proses pengisian formulir.<br>2. Siapkan data pelengkap keluarga dan orang tua.<br>3. Jawab soal gambar dengan pilihan yang paling sesuai kepribadian Anda.<br>4. Jangan memuat ulang (*refresh*) halaman saat tes berlangsung agar jawaban tidak hilang.</p>
+          </div>
+          <div class="card" style="display:flex; flex-direction:column; justify-content:center; text-align:center;">
+            <h3>Punya Sesi Tes Tertunda?</h3>
+            <p style="color:var(--muted); margin-bottom:16px;">Sistem menyimpan draf pengisian terakhir di perangkat ini secara otomatis.</p>
+            <button class="btn outline" onclick="promptResumeDraft()">Pulihkan & Lanjutkan Sesi Tes</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- GERBANG MASUK LOGIN ADMIN -->
+      <section id="pageLogin" class="page">
+        <div style="max-width:420px; margin: 40px auto;">
+          <form class="card" id="loginForm" onsubmit="handleAdminLogin(event)">
+            <h3 style="margin-top:0; text-align:center; font-size:22px; color:var(--primary);">Autentikasi Admin BK</h3>
+            <p style="text-align:center; color:var(--muted); font-size:14px; margin-bottom:20px;">Silakan masukkan akun BK terdaftar</p>
+            <div class="field">
+              <label>ID Email Admin</label>
+              <input type="email" id="loginEmail" class="input" required placeholder="bksmkpgri2@gmail.com" autocomplete="username">
+            </div>
+            <div class="field">
+              <label>Kata Sandi (Password)</label>
+              <input type="password" id="loginPassword" class="input" required placeholder="••••••••" autocomplete="current-password">
+            </div>
+            <div style="margin: 10px 0 20px; display:flex; align-items:center; gap:8px;">
+              <input type="checkbox" id="loginRemember" checked style="transform: scale(1.1); cursor:pointer;">
+              <label for="loginRemember" style="font-size:13px; cursor:pointer; font-weight:600; color:#334155;">Ingat akun saya (Autosave)</label>
+            </div>
+            <button type="submit" class="btn blue" style="width:100%;">Masuk Panel Kontrol</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- DATA DIRI SISWA (UPDATE KOMPONEN LENGKAP) -->
+      <section id="pageIdentity" class="page">
+        <div class="card" style="max-width: 900px; margin: 0 auto;">
+          <div class="section-title" style="border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom: 0;">
+            <h3>Formulir Portofolio & Data Diri Siswa</h3>
+            <button class="btn gray small" onclick="showPage('home')">Batal</button>
+          </div>
+          
+          <!-- BAGIAN 1: IDENTITAS UTAMA -->
+          <div class="form-section-header">1. Identitas Pribadi Siswa</div>
+          <div class="form-grid">
+            <div class="field"><label>Nama Lengkap *</label><input id="idNama" class="input" type="text" required></div>
+            <div class="field"><label>Email *</label><input id="idEmail" class="input" type="email" required></div>
+            <div class="field"><label>Jenis Kelamin *</label><select id="idJK" class="input" required><option value="">Pilih</option><option value="Laki-laki">Laki-laki</option><option value="Perempuan">Perempuan</option></select></div>
+            <div class="field"><label>Tempat Lahir *</label><input id="idTempatLahir" class="input" type="text" required></div>
+            <div class="field"><label>Tanggal Lahir *</label><input id="idTglLahir" class="input" type="date" required></div>
+            <div class="field"><label>Usia *</label><input id="idUsia" class="input" type="number" min="1" required></div>
+            <div class="field"><label>Kelas *</label><input id="idKelas" class="input" type="text" placeholder="Contoh: X-TKJ 1" required></div>
+            <div class="field"><label>Nomor HP Siswa *</label><input id="idHpSiswa" class="input" type="tel" placeholder="08xxxxxxxxxx" required></div>
+            <div class="field"><label>Nomor HP Orang Tua *</label><input id="idHpOrtu" class="input" type="tel" placeholder="08xxxxxxxxxx" required></div>
+            <div class="field"><label>Asal Sekolah (SMP) *</label><input id="idAsalSMP" class="input" type="text" required></div>
+          </div>
+
+          <!-- BAGIAN 2: AKADEMIK & PEMILIHAN JURUSAN -->
+          <div class="form-section-header">2. Riwayat & Pilihan Jurusan SMK</div>
+          <div class="form-grid" style="grid-template-columns: 1fr;">
+            <div class="field"><label>Jurusan SMK Saat Ini *</label><input id="idJurusan" class="input" type="text" placeholder="Contoh: Teknik Komputer dan Jaringan" required></div>
+          </div>
+          <div class="grid cols-2">
+            <div class="field">
+              <label>Alasan Memilih Jurusan Ini *</label>
+              <div class="radio-group-box">
+                <label class="radio-inline-label"><input type="radio" name="alasanJurusan" value="Kemauan sendiri" checked> Kemauan sendiri</label>
+                <label class="radio-inline-label"><input type="radio" name="alasanJurusan" value="Orang tua"> Orang tua</label>
+                <label class="radio-inline-label"><input type="radio" name="alasanJurusan" value="Ikut teman"> Ikut teman</label>
+                <label class="radio-inline-label"><input type="radio" name="alasanJurusan" value="Tidak tahu"> Tidak tahu</label>
+                <label class="radio-inline-label" style="gap:4px; flex-wrap:wrap;">
+                  <input type="radio" name="alasanJurusan" value="Lainnya"> Lainnya: 
+                  <input type="text" id="idAlasanJurusanLain" class="input" style="padding:4px 8px; border-radius:6px; flex:1; min-width:120px;" placeholder="Tulis alasan...">
+                </label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Apakah Jurusan Ini Pilihan Pertama Anda? *</label>
+              <div class="radio-group-box">
+                <label class="radio-inline-label"><input type="radio" name="pilihanPertama" value="Ya" checked> Ya</label>
+                <label class="radio-inline-label"><input type="radio" name="pilihanPertama" value="Tidak"> Tidak</label>
+              </div>
+              <div class="field" style="margin-top:10px;">
+                <label>Jurusan yang Diinginkan Sebelumnya (Jika Pilih Tidak)</label>
+                <input id="idJurusanSebelumnya" class="input" type="text" placeholder="Isi jika ada">
+              </div>
+            </div>
+          </div>
+
+          <!-- BAGIAN 3: LATAR BELAKANG KELUARGA -->
+          <div class="form-section-header">3. Profil Latar Belakang Keluarga</div>
+          <div class="grid cols-2">
+            <div class="field">
+              <label>Tinggal Bersama *</label>
+              <div class="radio-group-box">
+                <label class="radio-inline-label"><input type="radio" name="tinggalBersama" value="Orang tua" checked> Orang tua</label>
+                <label class="radio-inline-label"><input type="radio" name="tinggalBersama" value="Ayah saja"> Ayah saja</label>
+                <label class="radio-inline-label"><input type="radio" name="tinggalBersama" value="Ibu saja"> Ibu saja</label>
+                <label class="radio-inline-label"><input type="radio" name="tinggalBersama" value="Wali"> Wali</label>
+                <label class="radio-inline-label" style="gap:4px; flex-wrap:wrap;">
+                  <input type="radio" name="tinggalBersama" value="Lainnya"> Lainnya:
+                  <input type="text" id="idTinggalBersamaLain" class="input" style="padding:4px 8px; border-radius:6px; flex:1; min-width:120px;" placeholder="Keterangan...">
+                </label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Struktur Saudara Kandung *</label>
+              <div class="form-grid" style="margin-bottom:0; gap:10px;">
+                <div class="field" style="margin:0;"><label style="font-size:12px;">Jumlah Saudara</label><input id="idJumlahSaudara" class="input" type="number" min="0" value="0" required></div>
+                <div class="form-subgrid">
+                  <div class="field" style="margin:0;"><label style="font-size:12px;">Anak Ke-</label><input id="idAnakKe" class="input" type="number" min="1" value="1" required></div>
+                  <div class="field" style="margin:0;"><label style="font-size:12px;">Dari (Jumlah)</label><input id="idDariSaudara" class="input" type="number" min="1" value="1" required></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid cols-2" style="margin-top:14px; gap:20px;">
+            <div style="background:#f8fafc; padding:14px; border-radius:14px; border:1px solid var(--border);">
+              <b style="color:var(--primary); font-size:14px; display:block; margin-bottom:10px;">Data Profil Ayah</b>
+              <div class="field"><label style="font-size:12px;">Pendidikan Terakhir Ayah *</label><input id="idAyahPendidikan" class="input" type="text" required></div>
+              <div class="field"><label style="font-size:12px;">Pekerjaan Ayah *</label><input id="idAyahPekerjaan" class="input" type="text" required></div>
+              <div class="field">
+                <label style="font-size:12px;">Status Hubungan Tinggal *</label>
+                <div class="row" style="gap:10px;">
+                  <label class="radio-inline-label"><input type="radio" name="ayahTinggal" value="Serumah" checked> Serumah</label>
+                  <label class="radio-inline-label"><input type="radio" name="ayahTinggal" value="Tidak serumah"> Tidak serumah</label>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:#f8fafc; padding:14px; border-radius:14px; border:1px solid var(--border);">
+              <b style="color:var(--primary); font-size:14px; display:block; margin-bottom:10px;">Data Profil Ibu</b>
+              <div class="field"><label style="font-size:12px;">Pendidikan Terakhir Ibu *</label><input id="idIbuPendidikan" class="input" type="text" required></div>
+              <div class="field"><label style="font-size:12px;">Pekerjaan Ibu *</label><input id="idIbuPekerjaan" class="input" type="text" required></div>
+              <div class="field">
+                <label style="font-size:12px;">Status Hubungan Tinggal *</label>
+                <div class="row" style="gap:10px;">
+                  <label class="radio-inline-label"><input type="radio" name="ibuTinggal" value="Serumah" checked> Serumah</label>
+                  <label class="radio-inline-label"><input type="radio" name="ibuTinggal" value="Tidak serumah"> Tidak serumah</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BAGIAN 4: HOBI, AKTIVITAS, CARA BELAJAR & CITA-CITA -->
+          <div class="form-section-header">4. Kebiasaan Belajar & Rencana Masa Depan</div>
+          <div class="form-grid">
+            <div class="field" style="grid-column: span 2;"><label>Hobi / Kegiatan Rutin *</label><input id="idHobi" class="input" type="text" placeholder="Contoh: Membaca, Olahraga, Menggambar" required></div>
+          </div>
+          <div class="grid cols-2">
+            <div class="field">
+              <label>Kegiatan di Luar Sekolah *</label>
+              <div class="radio-group-box">
+                <label class="radio-inline-label"><input type="radio" name="kegiatanLuar" value="Organisasi" checked> Organisasi</label>
+                <label class="radio-inline-label"><input type="radio" name="kegiatanLuar" value="Kerja part-time"> Kerja part-time</label>
+                <label class="radio-inline-label"><input type="radio" name="kegiatanLuar" value="Tidak ada"> Tidak ada</label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Aktivitas yang Paling Disukai *</label>
+              <div class="radio-group-box">
+                <label class="radio-inline-label"><input type="radio" name="aktivitasDisukai" value="Praktik" checked> Praktik</label>
+                <label class="radio-inline-label"><input type="radio" name="aktivitasDisukai" value="Teori"> Teori</label>
+                <label class="radio-inline-label"><input type="radio" name="aktivitasDisukai" value="Kreatif"> Kreatif</label>
+                <label class="radio-inline-label"><input type="radio" name="aktivitasDisukai" value="Sosial"> Sosial</label>
+                <label class="radio-inline-label"><input type="radio" name="aktivitasDisukai" value="Bisnis"> Bisnis</label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Waktu Belajar Per Hari *</label>
+              <div class="radio-group-box">
+                <label class="radio-inline-label"><input type="radio" name="waktuBelajar" value="< 1 jam" checked> &lt; 1 jam</label>
+                <label class="radio-inline-label"><input type="radio" name="waktuBelajar" value="1–2 jam"> 1–2 jam</label>
+                <label class="radio-inline-label"><input type="radio" name="waktuBelajar" value="> 2 jam"> &gt; 2 jam</label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Cara Belajar yang Disukai *</label>
+              <div class="radio-group-box">
+                <label class="radio-inline-label"><input type="radio" name="caraBelajar" value="Mendengar" checked> Mendengar</label>
+                <label class="radio-inline-label"><input type="radio" name="caraBelajar" value="Membaca"> Membaca</label>
+                <label class="radio-inline-label"><input type="radio" name="caraBelajar" value="Praktik langsung"> Praktik langsung</label>
+                <label class="radio-inline-label"><input type="radio" name="caraBelajar" value="Diskusi"> Diskusi</label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Penggunaan HP Per Hari *</label>
+              <div class="radio-group-box">
+                <label class="radio-inline-label"><input type="radio" name="penggunaanHP" value="< 2 jam" checked> &lt; 2 jam</label>
+                <label class="radio-inline-label"><input type="radio" name="penggunaanHP" value="2–5 jam"> 2–5 jam</label>
+                <label class="radio-inline-label"><input type="radio" name="penggunaanHP" value="> 5 jam"> &gt; 5 jam</label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Rencana Setelah Lulus SMK *</label>
+              <div class="radio-group-box">
+                <label class="radio-inline-label"><input type="radio" name="setelahLulus" value="Kuliah" checked> Kuliah</label>
+                <label class="radio-inline-label"><input type="radio" name="setelahLulus" value="Bekerja"> Bekerja</label>
+                <label class="radio-inline-label"><input type="radio" name="setelahLulus" value="Wirausaha"> Wirausaha</label>
+                <label class="radio-inline-label"><input type="radio" name="setelahLulus" value="Belum tahu"> Belum tahu</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-grid" style="grid-template-columns: 1fr; margin-top:14px;">
+            <div class="field"><label>Cita-cita *</label><input id="idCitaCita" class="input" type="text" placeholder="Tuliskan cita-cita masa depan Anda..." required></div>
+          </div>
+
+          <!-- BAGIAN 5: KUESIONER POLA ASUH (DARI PERMINTAAN SEBELUMNYA) -->
+          <div class="form-section-header">5. Pola Asuh di Rumah</div>
+          <div class="field">
+            <label>Bagaimana kecenderungan orang tua mengasuh Anda di rumah? *</label>
+            <label class="radio-card"><input type="radio" name="polaAsuh" value="Demokratis" checked><div><b>Demokratis</b> (Terbuka, komunikatif, aturan logis & suportif)</div></label>
+            <label class="radio-card"><input type="radio" name="polaAsuh" value="Otoriter"><div><b>Otoriter</b> (Kaku, satu arah, wajib patuh, dominan menghukum)</div></label>
+            <label class="radio-card"><input type="radio" name="polaAsuh" value="Permisif"><div><b>Permisif</b> (Bebas total, tanpa aturan mengikat, kurang pengawasan)</div></label>
+          </div>
+
+          <button class="btn blue" style="width:100%; margin-top:24px; font-size:16px; padding:14px;" onclick="validateAndStartTest()">Simpan Portofolio & Buka Lembar Tes Gambar</button>
+        </div>
+      </section>
+
+      <!-- LEMBAR KERJA TES JAWABAN GAMBAR -->
+      <section id="pageTest" class="page">
+        <div class="card" style="max-width:750px; margin:0 auto;">
+          <div class="section-title">
+            <div>
+              <h3 id="testTitleIndicator">Ujian Evaluasi Psikologi</h3>
+              <span id="studentIdentBadge" class="badge" style="margin-top:6px;">Siswa: -</span>
+            </div>
+            <button class="btn gray small" onclick="showPage('home')">Tunda</button>
+          </div>
+          <div class="progress-wrap"><div class="progress-bar" id="testProgressBar"></div></div>
+          
+          <div id="activeQuestionContainer" style="margin:24px 0;"></div>
+
+          <div class="row" style="border-top:1px solid var(--border); padding-top:16px;">
+            <button class="btn outline" id="btnTestPrev" onclick="navigateQuestion(-1)">Sebelumnya</button>
+            <button class="btn blue" id="btnTestNext" onclick="navigateQuestion(1)">Selanjutnya</button>
+            <button class="btn success hidden" id="btnTestSubmit" onclick="finalizeSubmission()">Kirim Semua Jawaban</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL UTAMA DASHBOARD ADMIN -->
+      <section id="pageAdmin" class="page">
+        <div class="admin-layout">
+          <aside class="admin-sidebar">
+            <div style="padding:10px; font-weight:800; font-size:12px; text-transform:uppercase; color:var(--muted)">Menu Navigasi</div>
+            <button class="admin-menu-btn active" id="mBtn-rekap" onclick="switchAdminMenu('rekap')">📊 Rekap Nilai Masuk</button>
+            <button class="admin-menu-btn" id="mBtn-soal" onclick="switchAdminMenu('soal')">📝 Edit Soal & Gambar</button>
+            <button class="admin-menu-btn" id="mBtn-branding" onclick="switchAdminMenu('branding')">🎨 Branding & Tema</button>
+            <button class="admin-menu-btn" id="mBtn-beranda" onclick="switchAdminMenu('beranda')">🏠 Edit Beranda</button>
+            <button class="admin-menu-btn" id="mBtn-konektor" onclick="switchAdminMenu('konektor')">🔗 Sistem Konektor</button>
+            <hr style="width:100%; border:0; border-top:1px solid var(--border); margin:12px 0;">
+            <button class="btn danger small" onclick="handleAdminLogout()">Keluar Panel</button>
+          </aside>
+
+          <div class="admin-content">
+            <!-- MENU 1: REKAP NILAI -->
+            <div id="subAdmin-rekap" class="card sub-admin-view">
+              <div class="section-title">
+                <h3>Rekapitulasi Respon Masuk Siswa</h3>
+                <div class="row" style="flex:0 0 auto; gap:8px;">
+                  <button class="btn outline small" onclick="refreshCloudData()">Sync Cloud</button>
+                  <button class="btn success small" onclick="downloadBackupCSV()">Unduh CSV</button>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Waktu</th><th>Nama Lengkap</th><th>Kelas</th><th>Jurusan</th><th>Pola Asuh</th><th>Status</th></tr>
+                  </thead>
+                  <tbody id="rekapTableBody">
+                    <tr><td colspan="6" style="text-align:center; color:var(--muted)">Belum ada data masuk.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- MENU 2: EDIT SOAL (MENDUKUNG "contoh edit soal.png") -->
+            <div id="subAdmin-soal" class="card sub-admin-view hidden">
+              <div class="section-title">
+                <h3>Sistem Manajemen Soal & Gambar Instan</h3>
+                <button class="btn primary small" onclick="addNewQuestionNode()">+ Tambah Soal Baru</button>
+              </div>
+              <div id="adminQuestionListContainer"></div>
+              <button class="btn blue" style="width:100%; margin-top:12px;" onclick="saveQuestionsState()">Simpan Seluruh Perubahan Soal</button>
+            </div>
+
+            <!-- MENU 3: BRANDING -->
+            <div id="subAdmin-branding" class="card sub-admin-view hidden">
+              <h3>Modifikasi Identitas Visual & Branding Web</h3>
+              <div class="field">
+                <label>Judul Header Aplikasi</label>
+                <input type="text" id="brandInputTitle" class="input">
+              </div>
+              <div class="field">
+                <label>Sub-Judul Deskripsi Atas</label>
+                <input type="text" id="brandInputSubtitle" class="input">
+              </div>
+              <div class="grid cols-2">
+                <div class="field">
+                  <label>Pilih Warna Utama Sekolah (Primary)</label>
+                  <input type="color" id="brandInputColor" class="input" style="height:46px; padding:4px;">
+                </div>
+                <div class="field">
+                  <label>Ganti Logo Aplikasi (Unggah File Gambar)</label>
+                  <input type="file" id="brandInputLogoFile" class="input" accept="image/*" onchange="processImageUpload(this, 'logo')">
+                  <img id="previewBrandingLogo" class="img-preview" src="" alt="Preview Logo">
+                </div>
+              </div>
+              <button class="btn blue" style="margin-top:12px;" onclick="saveBrandingConfig()">Terapkan Visual Tema</button>
+            </div>
+
+            <!-- MENU 4: EDIT BERANDA -->
+            <div id="subAdmin-beranda" class="card sub-admin-view hidden">
+              <h3>Ubah Konten Teks Halaman Depan (Beranda)</h3>
+              <div class="field">
+                <label>Judul Utama Banner Hero</label>
+                <input type="text" id="homeInputHeroTitle" class="input">
+              </div>
+              <div class="field">
+                <label>Paragraf Deskripsi Utama</label>
+                <textarea id="homeInputHeroText" class="input"></textarea>
+              </div>
+              <div class="field">
+                <label>Blok Teks Petunjuk Pelaksanaan (Gunakan tag &lt;br&gt; untuk baris baru)</label>
+                <textarea id="homeInputGuide" class="input" style="min-height:120px;"></textarea>
+              </div>
+              <button class="btn blue" onclick="saveHomepageConfig()">Simpan Konten Beranda</button>
+            </div>
+
+            <!-- MENU 5: SISTEM KONEKTOR -->
+            <div id="subAdmin-konektor" class="card sub-admin-view hidden">
+              <h3>Konfigurasi Gerbang Integrasi Google Cloud</h3>
+              <div class="field">
+                <label>Google Apps Script Web App Deployment URL</label>
+                <input type="text" id="connInputEndpoint" class="input">
+              </div>
+              <div class="field">
+                <label>Target Google Spreadsheet Unique ID</label>
+                <input type="text" id="connInputSheetId" class="input">
+              </div>
+              <div class="row" style="margin-top:12px;">
+                <button class="btn blue" onclick="saveConnectorConfig()">Simpan Konfigurasi Konektor</button>
+                <button class="btn outline" onclick="openLinkedSpreadsheet()">Buka Google Sheets Langsung</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="globalToast">Pesan Sistem</div>
+
+  <script>
+    const ADMIN_CREDENTIALS = {
+      email: "bksmkpgri2@gmail.com",
+      pass: "bkgrida#26"
+    };
+
+    let appState = {
+      endpoint: "https://script.google.com/macros/s/AKfycbzd0OPDBs16wvKsR2lXVmiuywqKnWnXixIOP0K2NkmznHW2Lpv_HLTKBoPKB3R42F4Y/exec",
+      spreadsheetId: "1AI9_KNQFaWEGCQA_NX5tnb-6EA8bMJhjmI0EqKXBOYs",
+      currentTestUser: null,
+      activeTestIndex: 0,
+      studentAnswers: {},
+      cloudSubmissions: [],
+      branding: {
+        title: "Alat Tes Psikologi Internal",
+        subtitle: "SMK PGRI 2 Kediri · BK Cloud Management",
+        primaryColor: "#0f3a66",
+        logoDataUrl: ""
+      },
+      homepage: {
+        heroTitle: "Selamat Datang di Portal Tes Psikologi",
+        heroText: "Silakan isi kelengkapan portofolio biodata pribadi secara valid, kerjakan rangkaian instrumen tes gambar, dan hasil tes akan langsung terarsip ke sistem cloud sekolah secara otomatis.",
+        guideText: "1. Pastikan koneksi internet stabil selama proses pengisian formulir.<br>2. Siapkan data pelengkap keluarga dan orang tua.<br>3. Jawab soal gambar dengan pilihan yang paling sesuai kepribadian Anda.<br>4. Jangan memuat ulang (*refresh*) halaman saat tes berlangsung agar jawaban tidak hilang."
+      },
+      questions: [
+        {
+          id: "soal_1",
+          type: "mcq",
+          prompt: "Lihat gambar stimulus di bawah, pilih bentuk kelanjutan pola yang menurut Anda paling logis!",
+          image: "",
+          options: [
+            { text: "Opsi Pilihan Pola A", image: "" },
+            { text: "Opsi Pilihan Pola B", image: "" }
+          ]
+        }
+      ]
+    };
+
+    window.onload = function() {
+      loadStateFromLocalStorage();
+      applyStateToVisuals();
+      checkAutoLogin();
+    };
+
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page' + pageId.charAt(0).toUpperCase() + pageId.slice(1)).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function triggerToast(text) {
+      const t = document.getElementById("globalToast");
+      t.textContent = text;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 3000);
+    }
+
+    function saveStateToLocalStorage() {
+      localStorage.setItem("bk_app_state", JSON.stringify(appState));
+    }
+
+    function loadStateFromLocalStorage() {
+      const stored = localStorage.getItem("bk_app_state");
+      if (stored) {
+        try { appState = JSON.parse(stored); } catch(e) { console.error("Gagal parse local storage state."); }
+      }
+    }
+
+    function applyStateToVisuals() {
+      document.getElementById("siteTitleTag").textContent = appState.branding.title;
+      document.getElementById("headerTitle").textContent = appState.branding.title;
+      document.getElementById("headerSubtitle").textContent = appState.branding.subtitle;
+      document.documentElement.style.setProperty('--primary', appState.branding.primaryColor);
+      
+      const logoBox = document.getElementById("mainLogoBox");
+      if(appState.branding.logoDataUrl) {
+        logoBox.innerHTML = `<img src="${appState.branding.logoDataUrl}" alt="Logo">`;
+        document.getElementById("previewBrandingLogo").src = appState.branding.logoDataUrl;
+      } else {
+        logoBox.innerHTML = "💻";
+      }
+
+      document.getElementById("heroTitleView").textContent = appState.homepage.heroTitle;
+      document.getElementById("heroTextView").textContent = appState.homepage.heroText;
+      document.getElementById("guideTextView").innerHTML = appState.homepage.guideText;
+
+      document.getElementById("brandInputTitle").value = appState.branding.title;
+      document.getElementById("brandInputSubtitle").value = appState.branding.subtitle;
+      document.getElementById("brandInputColor").value = appState.branding.primaryColor;
+      document.getElementById("homeInputHeroTitle").value = appState.homepage.heroTitle;
+      document.getElementById("homeInputHeroText").value = appState.homepage.heroText;
+      document.getElementById("homeInputGuide").value = appState.homepage.guideText;
+      document.getElementById("connInputEndpoint").value = appState.endpoint;
+      document.getElementById("connInputSheetId").value = appState.spreadsheetId;
+    }
+
+    function openAdminPanel() {
+      const isLoggedIn = sessionStorage.getItem("admin_session_active");
+      if (isLoggedIn === "true") {
+        showPage("admin");
+        renderAdminQuestionManagement();
+        renderRekapTable();
+      } else {
+        showPage("login");
+      }
+    }
+
+    function checkAutoLogin() {
+      const savedEmail = localStorage.getItem("autologin_email");
+      const savedPass = localStorage.getItem("autologin_pass");
+      if (savedEmail === ADMIN_CREDENTIALS.email && savedPass === ADMIN_CREDENTIALS.pass) {
+        document.getElementById("loginEmail").value = savedEmail;
+        document.getElementById("loginPassword").value = savedPass;
+      }
+    }
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const em = document.getElementById("loginEmail").value.trim();
+      const ps = document.getElementById("loginPassword").value;
+      const remember = document.getElementById("loginRemember").checked;
+
+      if (em === ADMIN_CREDENTIALS.email && ps === ADMIN_CREDENTIALS.pass) {
+        if (remember) {
+          localStorage.setItem("autologin_email", em);
+          localStorage.setItem("autologin_pass", ps);
+        } else {
+          localStorage.removeItem("autologin_email");
+          localStorage.removeItem("autologin_pass");
+        }
+        sessionStorage.setItem("admin_session_active", "true");
+        triggerToast("Login Berhasil! Selamat Datang Admin BK.");
+        showPage("admin");
+        renderAdminQuestionManagement();
+        renderRekapTable();
+      } else {
+        triggerToast("Kredensial salah! Akses ditolak.");
+      }
+    }
+
+    function handleAdminLogout() {
+      sessionStorage.removeItem("admin_session_active");
+      triggerToast("Sesi admin diakhiri.");
+      showPage("home");
+    }
+
+    function switchAdminMenu(menuKey) {
+      document.querySelectorAll(".admin-menu-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".sub-admin-view").forEach(v => v.classList.add("hidden"));
+      
+      document.getElementById("mBtn-" + menuKey).classList.add("active");
+      document.getElementById("subAdmin-" + menuKey).classList.remove("hidden");
+    }
+
+    function saveBrandingConfig() {
+      appState.branding.title = document.getElementById("brandInputTitle").value.trim();
+      appState.branding.subtitle = document.getElementById("brandInputSubtitle").value.trim();
+      appState.branding.primaryColor = document.getElementById("brandInputColor").value;
+      saveStateToLocalStorage();
+      applyStateToVisuals();
+      triggerToast("Branding visual sukses diperbarui.");
+    }
+
+    function saveHomepageConfig() {
+      appState.homepage.heroTitle = document.getElementById("homeInputHeroTitle").value.trim();
+      appState.homepage.heroText = document.getElementById("homeInputHeroText").value.trim();
+      appState.homepage.guideText = document.getElementById("homeInputGuide").value.trim();
+      saveStateToLocalStorage();
+      applyStateToVisuals();
+      triggerToast("Konten teks beranda sukses disimpan.");
+    }
+
+    function saveConnectorConfig() {
+      appState.endpoint = document.getElementById("connInputEndpoint").value.trim();
+      appState.spreadsheetId = document.getElementById("connInputSheetId").value.trim();
+      saveStateToLocalStorage();
+      applyStateToVisuals();
+      triggerToast("Konfigurasi gerbang cloud berhasil disinkronkan.");
+    }
+
+    function openLinkedSpreadsheet() {
+      window.open("https://docs.google.com/spreadsheets/d/" + appState.spreadsheetId, "_blank");
+    }
+
+    function processImageUpload(inputElement, targetType, questionIndex, optionIndex) {
+      const file = inputElement.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const dataUrl = e.target.result;
+        if (targetType === 'logo') {
+          appState.branding.logoDataUrl = dataUrl;
+          document.getElementById("previewBrandingLogo").src = dataUrl;
+        } else if (targetType === 'questionStimulus') {
+          appState.questions[questionIndex].image = dataUrl;
+          document.getElementById(`qPrevImg-${questionIndex}`).src = dataUrl;
+        } else if (targetType === 'optionStimulus') {
+          appState.questions[questionIndex].options[optionIndex].image = dataUrl;
+          document.getElementById(`optPrevImg-${questionIndex}-${optionIndex}`).src = dataUrl;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function renderAdminQuestionManagement() {
+      const container = document.getElementById("adminQuestionListContainer");
+      container.innerHTML = "";
+
+      appState.questions.forEach((q, qIdx) => {
+        const div = document.createElement("div");
+        div.className = "q-editor-card";
+        
+        let optionHtml = "";
+        if (q.type === 'mcq') {
+          q.options.forEach((opt, oIdx) => {
+            optionHtml += `
+              <div class="opt-editor-row">
+                <span style="font-weight:bold;">${String.fromCharCode(65 + oIdx)}.</span>
+                <input type="text" class="input" style="padding:6px 10px;" value="${opt.text}" oninput="appState.questions[${qIdx}].options[${oIdx}].text=this.value">
+                <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:4px;">
+                  <input type="file" accept="image/*" style="font-size:11px;" onchange="processImageUpload(this, 'optionStimulus', ${qIdx}, ${oIdx})">
+                  <img id="optPrevImg-${qIdx}-${oIdx}" class="img-preview" style="max-height:50px; margin:0;" src="${opt.image || ''}">
+                </div>
+                <button class="btn danger small" style="padding:4px 8px;" onclick="removeOptionNode(${qIdx}, ${oIdx})">X</button>
+              </div>`;
+          });
+        }
+
+        div.innerHTML = `
+          <div style="display:flex; justify-content:between; align-items:center; margin-bottom:10px; border-bottom:1px solid var(--border); padding-bottom:8px;">
+            <b style="color:var(--primary)">Nomor Soal ${qIdx + 1}</b>
+            <button class="btn danger small" style="margin-left:auto; padding:4px 10px;" onclick="removeQuestionNode(${qIdx})">Hapus Soal</button>
+          </div>
+          <div class="field">
+            <label>Teks / Pertanyaan Utama Soal</label>
+            <input type="text" class="input" value="${q.prompt}" oninput="appState.questions[${qIdx}].prompt=this.value">
+          </div>
+          <div class="grid cols-2" style="margin-bottom:12px;">
+            <div class="field">
+              <label>Tipe Model Jawaban</label>
+              <select class="input" onchange="changeQuestionTypeNode(${qIdx}, this.value)">
+                <option value="mcq" ${q.type === 'mcq' ? 'selected' : ''}>Pilihan Ganda (Berbasis Teks / Gambar)</option>
+                <option value="text" ${q.type === 'text' ? 'selected' : ''}>Esai Teks Bebas</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Gambar Stimulus Utama Soal</label>
+              <input type="file" accept="image/*" class="input" onchange="processImageUpload(this, 'questionStimulus', ${qIdx})">
+              <img id="qPrevImg-${qIdx}" class="img-preview" src="${q.image || ''}">
+            </div>
+          </div>
+          ${q.type === 'mcq' ? `
+            <div style="margin-top:10px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <label style="font-size:13px; font-weight:700;">Daftar Pilihan Jawaban Gambar</label>
+                <button class="btn success small" style="padding:4px 8px; font-size:12px;" onclick="addOptionNode(${qIdx})">+ Opsi Baru</button>
+              </div>
+              <div id="optListHost-${qIdx}">${optionHtml}</div>
+            </div>` : ''}
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function addNewQuestionNode() {
+      appState.questions.push({
+        id: "soal_" + (new Date().getTime()),
+        type: "mcq",
+        prompt: "Tulis teks soal baru di sini...",
+        image: "",
+        options: [{ text: "Opsi A", image: "" }, { text: "Opsi B", image: "" }]
+      });
+      renderAdminQuestionManagement();
+    }
+
+    function changeQuestionTypeNode(qIdx, val) {
+      appState.questions[qIdx].type = val;
+      if (val === 'mcq' && !appState.questions[qIdx].options) {
+        appState.questions[qIdx].options = [{ text: "Opsi A", image: "" }];
+      }
+      renderAdminQuestionManagement();
+    }
+
+    function addOptionNode(qIdx) {
+      appState.questions[qIdx].options.push({ text: "Opsi Pilihan Baru", image: "" });
+      renderAdminQuestionManagement();
+    }
+
+    function removeOptionNode(qIdx, oIdx) {
+      appState.questions[qIdx].options.splice(oIdx, 1);
+      renderAdminQuestionManagement();
+    }
+
+    function removeQuestionNode(qIdx) {
+      if(confirm("Apakah Anda yakin ingin menghapus nomor soal ini?")) {
+        appState.questions.splice(qIdx, 1);
+        renderAdminQuestionManagement();
+      }
+    }
+
+    function saveQuestionsState() {
+      saveStateToLocalStorage();
+      triggerToast("Seluruh daftar konfigurasi soal sukses diperbarui.");
+    }
+
+    // EXTRACTION & VALIDATION DATA FORMULIR BARU 
+    function validateAndStartTest() {
+      const nama = document.getElementById("idNama").value.trim();
+      const email = document.getElementById("idEmail").value.trim();
+      const jk = document.getElementById("idJK").value;
+      const tempatLahir = document.getElementById("idTempatLahir").value.trim();
+      const tglLahir = document.getElementById("idTglLahir").value;
+      const usia = document.getElementById("idUsia").value;
+      const kelas = document.getElementById("idKelas").value.trim();
+      const hpSiswa = document.getElementById("idHpSiswa").value.trim();
+      const hpOrtu = document.getElementById("idHpOrtu").value.trim();
+      const asalSMP = document.getElementById("idAsalSMP").value.trim();
+      const jurusan = document.getElementById("idJurusan").value.trim();
+      
+      // Alasan Jurusan + Kondisi Lainnya
+      let alasanJurusan = document.querySelector("input[name='alasanJurusan']:checked")?.value || "";
+      if(alasanJurusan === "Lainnya") {
+        alasanJurusan = "Lainnya: " + document.getElementById("idAlasanJurusanLain").value.trim();
+      }
+
+      const pilihanPertama = document.querySelector("input[name='pilihanPertama']:checked")?.value || "";
+      const jurusanSebelumnya = document.getElementById("idJurusanSebelumnya").value.trim();
+
+      // Kondisi Keluarga
+      let tinggalBersama = document.querySelector("input[name='tinggalBersama']:checked")?.value || "";
+      if(tinggalBersama === "Lainnya") {
+        tinggalBersama = "Lainnya: " + document.getElementById("idTinggalBersamaLain").value.trim();
+      }
+      const jumlahSaudara = document.getElementById("idJumlahSaudara").value;
+      const anakKe = document.getElementById("idAnakKe").value;
+      const dariSaudara = document.getElementById("idDariSaudara").value;
+
+      // Data Ayah & Ibu
+      const ayahPendidikan = document.getElementById("idAyahPendidikan").value.trim();
+      const ayahPekerjaan = document.getElementById("idAyahPekerjaan").value.trim();
+      const ayahTinggal = document.querySelector("input[name='ayahTinggal']:checked")?.value || "";
+      const ibuPendidikan = document.getElementById("idIbuPendidikan").value.trim();
+      const ibuPekerjaan = document.getElementById("idIbuPekerjaan").value.trim();
+      const ibuTinggal = document.querySelector("input[name='ibuTinggal']:checked")?.value || "";
+
+      // Kebiasaan & Rencana
+      const hobi = document.getElementById("idHobi").value.trim();
+      const kegiatanLuar = document.querySelector("input[name='kegiatanLuar']:checked")?.value || "";
+      const aktivitasDisukai = document.querySelector("input[name='aktivitasDisukai']:checked")?.value || "";
+      const waktuBelajar = document.querySelector("input[name='waktuBelajar']:checked")?.value || "";
+      const caraBelajar = document.querySelector("input[name='caraBelajar']:checked")?.value || "";
+      const penggunaanHP = document.querySelector("input[name='penggunaanHP']:checked")?.value || "";
+      const setelahLulus = document.querySelector("input[name='setelahLulus']:checked")?.value || "";
+      const citaCita = document.getElementById("idCitaCita").value.trim();
+      const polaAsuh = document.querySelector("input[name='polaAsuh']:checked")?.value || "";
+
+      // Validasi Dasar Kolom Wajib
+      if(!nama || !email || !jk || !tempatLahir || !tglLahir || !usia || !kelas || !hpSiswa || !hpOrtu || !asalSMP || !jurusan || !ayahPendidikan || !ayahPekerjaan || !ibuPendidikan || !ibuPekerjaan || !hobi || !citaCita) {
+        triggerToast("Mohon lengkapi seluruh kolom formulir bertanda bintang (*) terlebih dahulu!");
+        return;
+      }
+
+      // Gabungkan struktur data dalam objek state aktif
+      appState.currentTestUser = { 
+        nama, email, jk, tempatLahir, tglLahir, usia, kelas, hpSiswa, hpOrtu, asalSMP, 
+        jurusan, alasanJurusan, pilihanPertama, jurusanSebelumnya, tinggalBersama, 
+        jumlahSaudara, anakKe, dariSaudara, ayahPendidikan, ayahPekerjaan, ayahTinggal, 
+        ibuPendidikan, ibuPekerjaan, ibuTinggal, hobi, kegiatanLuar, aktivitasDisukai, 
+        waktuBelajar, caraBelajar, penggunaanHP, setelahLulus, citaCita, polaAsuh 
+      };
+      
+      localStorage.setItem("bk_active_user", JSON.stringify(appState.currentTestUser));
+      document.getElementById("studentIdentBadge").textContent = "Peserta: " + nama + " (" + kelas + ")";
+      appState.activeTestIndex = 0;
+      showPage("test");
+      renderActiveQuestion();
+    }
+
+    function renderActiveQuestion() {
+      const host = document.getElementById("activeQuestionContainer");
+      if(!appState.questions.length) {
+        host.innerHTML = "<p style='text-align:center; color:var(--danger);'>Belum ada soal ujian yang dibuat oleh Admin.</p>";
+        return;
+      }
+
+      const q = appState.questions[appState.activeTestIndex];
+      const pct = ((appState.activeTestIndex + 1) / appState.questions.length) * 100;
+      document.getElementById("testProgressBar").style.width = pct + "%";
+
+      let html = `
+        <div style="font-weight:bold; margin-bottom:8px; color:var(--primary);">Pertanyaan ${appState.activeTestIndex + 1} dari ${appState.questions.length}</div>
+        <p style="font-size:18px; line-height:1.5; margin:0 0 14px;">${q.prompt}</p>
+      `;
+
+      if(q.image) {
+        html += `<img src="${q.image}" style="width:100%; max-height:250px; object-fit:contain; background:#fff; border:1px solid var(--border); border-radius:12px; margin-bottom:16px;">`;
+      }
+
+      if(q.type === 'mcq') {
+        html += `<div style="display:flex; flex-direction:column; gap:10px;">`;
+        q.options.forEach((opt) => {
+          const isSel = appState.studentAnswers[q.id] === opt.text;
+          html += `
+            <label class="radio-card" style="${isSel ? 'outline:2px solid var(--primary-2); background:#eff6ff;' : ''}">
+              <input type="radio" name="student_ans" value="${opt.text}" ${isSel ? 'checked' : ''} onchange="storeStudentAnswer('${q.id}', this.value)">
+              <div style="width:100%;">
+                <div>${opt.text}</div>
+                ${opt.image ? `<img src="${opt.image}" style="max-height:120px; object-fit:contain; margin-top:8px; display:block; border-radius:6px; border:1px solid var(--border);">` : ''}
+              </div>
+            </label>
+          `;
+        });
+        html += `</div>`;
+      } else {
+        const currentTextVal = appState.studentAnswers[q.id] || "";
+        html += `<textarea class="input" placeholder="Ketik jawaban tertulis Anda disini..." oninput="storeStudentAnswer('${q.id}', this.value)">${currentTextVal}</textarea>`;
+      }
+
+      host.innerHTML = html;
+
+      document.getElementById("btnTestPrev").style.visibility = appState.activeTestIndex === 0 ? "hidden" : "visible";
+      if(appState.activeTestIndex === appState.questions.length - 1) {
+        document.getElementById("btnTestNext").classList.add("hidden");
+        document.getElementById("btnTestSubmit").classList.remove("hidden");
+      } else {
+        document.getElementById("btnTestNext").classList.remove("hidden");
+        document.getElementById("btnTestSubmit").classList.add("hidden");
+      }
+    }
+
+    function storeStudentAnswer(qId, val) {
+      appState.studentAnswers[qId] = val;
+      localStorage.setItem("bk_active_answers", JSON.stringify(appState.studentAnswers));
+    }
+
+    function navigateQuestion(dir) {
+      appState.activeTestIndex += dir;
+      renderActiveQuestion();
+    }
+
+    function promptResumeDraft() {
+      const user = localStorage.getItem("bk_active_user");
+      const ans = localStorage.getItem("bk_active_answers");
+      if(user && ans) {
+        appState.currentTestUser = JSON.parse(user);
+        appState.studentAnswers = JSON.parse(ans);
+        document.getElementById("studentIdentBadge").textContent = "Peserta: " + appState.currentTestUser.nama;
+        appState.activeTestIndex = 0;
+        showPage("test");
+        renderActiveQuestion();
+        triggerToast("Sesi pengerjaan draft berhasil dipulihkan.");
+      } else {
+        triggerToast("Tidak ada draf pengerjaan yang tersimpan di perangkat ini.");
+      }
+    }
+
+    function finalizeSubmission() {
+      for(let q of appState.questions) {
+        if(!appState.studentAnswers[q.id]) {
+          triggerToast("Harap isi semua jawaban pertanyaan sebelum menekan tombol kirim!");
+          return;
+        }
+      }
+
+      triggerToast("Sedang mengirimkan berkas jawaban ke server database BK...");
+      
+      const packedData = {
+        action: "submit",
+        data: {
+          ...appState.currentTestUser,
+          answers: JSON.stringify(appState.studentAnswers),
+          timestamp: new Date().toISOString()
+        }
+      };
+
+      fetch(appState.endpoint, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(packedData)
+      })
+      .then(() => {
+        triggerToast("Sukses! Seluruh Lembar Jawaban Berhasil Terkirim.");
+        localStorage.removeItem("bk_active_user");
+        localStorage.removeItem("bk_active_answers");
+        appState.studentAnswers = {};
+        setTimeout(() => { showPage("home"); }, 2500);
+      })
+      .catch(err => {
+        console.error(err);
+        triggerToast("Koneksi gagal. Namun data tersimpan sebagai draf aman di memori lokal.");
+      });
+    }
+
+    function renderRekapTable() {
+      const tbody = document.getElementById("rekapTableBody");
+      if(!appState.cloudSubmissions.length) {
+        tbody.innerHTML = `
+          <tr>
+            <td>2026-06-24 10:15</td>
+            <td><b>Siswa Simulasi Contoh</b></td>
+            <td>X-TKJ 1</td>
+            <td>Teknik Komputer Jaringan</td>
+            <td><span class="badge">Demokratis</span></td>
+            <td style="color:var(--success); font-weight:700;">Terarsip Lokal</td>
+          </tr>`;
+        return;
+      }
+
+      tbody.innerHTML = appState.cloudSubmissions.map(s => `
+        <tr>
+          <td>${s.timestamp || '-'}</td>
+          <td><b>${s.nama || '-'}</b></td>
+          <td>${s.kelas || '-'}</td>
+          <td>${s.jurusan || '-'}</td>
+          <td><span class="badge">${s.polaAsuh || '-'}</span></td>
+          <td style="color:var(--success); font-weight:700;">Cloud Sinkron</td>
+        </tr>
+      `).join('');
+    }
+
+    function refreshCloudData() {
+      triggerToast("Menghubungkan ke Apps Script API...");
+      fetch(appState.endpoint + "?action=getConfig")
+      .then(res => res.json())
+      .then(d => {
+        if(d && d.results) {
+          appState.cloudSubmissions = d.results;
+          renderRekapTable();
+          triggerToast("Sinkronisasi data rekap real-time selesai.");
+        }
+      })
+      .catch(() => {
+        triggerToast("Gagal mengambil data terupdate dari Apps Script.");
+      });
+    }
+
+    function downloadBackupCSV() {
+      let csv = "Waktu,Nama Lengkap,Kelas,Jurusan,Pola Asuh\n";
+      if(appState.cloudSubmissions.length) {
+        appState.cloudSubmissions.forEach(s => {
+          csv += `"${s.timestamp}","${s.nama}","${s.kelas}","${s.jurusan}","${s.polaAsuh}"\n`;
+        });
+      } else {
+        csv += `"2026-06-24 10:15","Siswa Simulasi Contoh","X-TKJ 1","Teknik Komputer Jaringan","Demokratis"\n`;
+      }
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute("download", "rekap_psikologi_grida.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+</html>
